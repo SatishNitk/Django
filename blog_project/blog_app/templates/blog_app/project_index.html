@@ -1,0 +1,29 @@
+{% extends "blog_app/base.html" %}
+{% load static %}
+{% block page_content %}
+<h1>Projects</h1>
+<div class="row">
+{% for project in projects %}
+    <div class="col-md-4">
+        <div class="card mb-2">
+            <!-- <img class="card-img-top" src="{% static project.image %}"> -->
+            <!-- <img src="/home/satish/im/full/first.jpg" alt="" > -->
+            <div class="card-body">
+                {% if  project.hotel_Main_Img %}
+                <h1>hh</h1>
+            <img src={{project.image.url}} alt="" >
+                {% endif %}
+
+                <h5 class="card-title">{{ project.title }}</h5>
+                         <h5 class="card-title">{{ project.hotel_Main_Img }}</h5>
+                <p class="card-text">{{ project.description }}</p>
+                <a href="{% url 'project_detail' project.pk %}"
+                   class="btn btn-primary">
+                    Read More
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

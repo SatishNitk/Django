@@ -20,3 +20,6 @@ class Choice(models.Model):
 #satish
 #gupta1234
         
+
+gupta
+gupta1234
