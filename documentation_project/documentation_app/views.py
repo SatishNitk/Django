@@ -16,6 +16,7 @@ def detail(request, question_id):
     except Question.DoesNotExist:
         raise Http404("Question does not exist")
     return render(request, 'documentation_app/details.html', {'question': question})
+    
 #handle 404 with shortcut way
 def detail404(request, question_id):
 	question = get_object_or_404(Question, pk=question_id)

@@ -1,0 +1,13 @@
+li a {
+    color: blue;
+}
+body {
+    background: white url("back1.jpeg") no-repeat;
+}
+h1 a, h2 a {
+    color: #FF0000;
+    font-family: 'Lobster';
+}
+body {
+    padding-left: 55px;
+}
