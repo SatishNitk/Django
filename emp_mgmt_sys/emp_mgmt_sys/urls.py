@@ -15,17 +15,18 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+from django.conf.urls.static import static
+from django.conf import settings
 from employee.views import user_login,user_logout,success,ProfileUpdate,MyProfile
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('polls/', include('poll.urls')),
     path('emp/', include('employee.urls')),
-
     path('login/',user_login ,name="user_login"),
     path('success/',success ,name="user_success"),
     path('logout/',user_logout ,name="user_logout"),
     path('profle/',MyProfile.as_view() ,name="my_profile"),
     path('profle/update',ProfileUpdate.as_view() ,name="update_profile"),
 
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

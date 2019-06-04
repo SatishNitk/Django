@@ -102,7 +102,7 @@ def success(request):
 
 
 class ProfileUpdate(UpdateView):
-    fields = ['designation', 'salary']
+    fields = ['designation', 'salary','picture']
     template_name = 'auth/profile_update.html'
     success_url = reverse_lazy('my_profile')  # check the difference between reverse and reverse_lazy
 
