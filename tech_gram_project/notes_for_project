@@ -1,0 +1,6 @@
+
+
+#it will collect all static file from your project and create a static directory and 
+#it will puc all static file there
+
+python manage.py collectstatic

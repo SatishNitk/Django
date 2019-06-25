@@ -1,0 +1,11 @@
+<h1>
+	Your's Notes
+</h1>
+<ul>
+  {% for note_object in object_list %}
+
+  <li>
+  	{{ note_object }} <small><a href="{{ note_object.get_delete_url }}"> delete</a></small><small><a href="{{ note_object.get_update_url }}"> update</a></small>
+   </li>
+   {% endfor %}
+</ul>
