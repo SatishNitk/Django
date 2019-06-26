@@ -1,0 +1,52 @@
+{% extends "accounts/bash.html" %}
+
+{% block content %}
+{% if user.is_authenticated %}
+  Hi {{ user.username }}!
+  <table class="table mb-0">
+    <thead>
+      <tr>
+        <th>Cover</th>
+        <th>Title</th>
+        <th>Author</th>
+        <th>User</th>
+        <th>Description</th>
+        <th>Download</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for book in books %}
+        <tr>
+          <td>
+            {% if book.cover %}
+              <img src="{{ book.cover.url }}" alt="{{ book.title }}" style="width:100px;">
+            {% else %}
+              <span class="text-muted">No cover</span>
+            {% endif %}
+          </td>
+          <td>{{ book.title }}</td>
+          <td>{{ book.author }}</td>
+          <td>{{ book.user }}</td>
+          <td>{{ book.description }}</td>
+
+          <td>
+            <a href="{{ book.file.url }}" class="btn btn-primary btn-sm" target="_blank">
+              Download PDF
+            </a>
+          </td>
+          <td>
+            <form method="POST" action="{% url 'delete_view' book.pk %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p>You are not logged in..</p>
+  {% endif %}
+  
+{% endblock %}

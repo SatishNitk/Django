@@ -12,7 +12,7 @@
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="#">FILE SHARE</a>
+  <a class="navbar-brand" href="{% url 'home_view' %}">FILE SHARE</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -20,11 +20,26 @@
     <div class="navbar-nav ml-auto">
       {% if user.is_authenticated %}
       <a class="nav-item nav-link " href="
+           javascript:{document.getElementById('upload').submit()}">upload</a>
+           <form id="upload"  action="{% url 'upload_view' %}">
+            {% csrf_token %}
+            <input type="hidden"/>
+          </form>
+
+          <a class="nav-item nav-link " href="{% url 'book_list_view' %}">All File</a>
+          <a class="nav-item nav-link " href="{% url 'book_list_view_by_u' %}">File upload by u</a>  
+          <a class="nav-item nav-link " href="{% url 'book_list_view_by_other' %}">File shared by other</a>
+           
+
+
+      <a class="nav-item nav-link " href="
            javascript:{document.getElementById('logout').submit()}">logout</a>
            <form id="logout" method="POST" action="{% url 'logout_view' %}">
             {% csrf_token %}
             <input type="hidden"/>
           </form>
+          
+
       {% else %}
       <a class="nav-item nav-link " href="{% url 'signup_view' %}">Signup</a>
       <a class="nav-item nav-link" href="{% url 'login_view' %}">Login</a>
@@ -33,6 +48,9 @@
   </div>
 </nav>
 <br/>
+
+
+
 
 
 {% block content %}
