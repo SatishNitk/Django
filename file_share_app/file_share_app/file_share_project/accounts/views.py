@@ -4,6 +4,15 @@ from django.contrib.auth.models import User
 from django.contrib import auth
 from accounts.forms import StudentForm
 from accounts.models import *
+
+
+
+import io
+from django.http import FileResponse
+from reportlab.pdfgen import canvas
+
+
+
 # Create your views here.
 
 def home_view(request):
@@ -49,7 +58,7 @@ def logout_view(request):
 
 def upload_view(request):
 	if request.method == 'POST':
-		if request.POST.get('title') and request.POST.get('author') and request.POST.get('file'):
+		if request.POST.get('title') and request.POST.get('author') and len(request.FILES)!=0:
 			user_form = StudentForm(request.POST, request.FILES)
 			if user_form.is_valid():
 				user_form_instance = user_form.save(commit=False)
@@ -102,3 +111,39 @@ def delete_view(request, pk):
 		book = Filedb.objects.get(pk=pk)
 		book.delete()
 		return redirect('book_list_view')
+
+def downloader_view(request):
+	return HttpResponse("downloadddder_view")
+
+
+# def my_image(request):
+#     # Create a file-like buffer to receive PDF data.
+#     buffer = io.BytesIO()
+
+#     # Create the PDF object, using the buffer as its "file."
+#     p = canvas.Canvas(buffer)
+
+#     # Draw things on the PDF. Here's where the PDF generation happens.
+#     # See the ReportLab documentation for the full list of functionality.
+#     p.drawString(100, 100, "Hello world.")
+
+#     # Close the PDF object cleanly, and we're done.
+#     p.showPage()
+#     p.save()
+
+#     # FileResponse sets the Content-Disposition header so that browsers
+#     # present the option to save the file.
+#     return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
+
+def my_image(request):
+	response = HttpResponse(content_type='application/pdf')
+	response['Content-Disposition'] = 'attachment; filename="WishList.pdf"'
+	buffer = io.BytesIO()
+	p = canvas.Canvas(buffer)
+	p.drawString(100, 100, "Helldddddo world.")
+	p.showPage()
+	p.save()
+	pdf = buffer.getvalue()
+	buffer.close()
+	response.write(pdf)
+	return response
