@@ -1,4 +1,4 @@
-from django.urls import path,include
+from django.urls import path,include,re_path
 from accounts.views import *
 
 urlpatterns = [
@@ -12,8 +12,9 @@ urlpatterns = [
     path('book_list/', book_list_view, name='book_list_view'),
     path('book_listu/', book_list_view_by_u, name='book_list_view_by_u'),
     path('book_listother/', book_list_view_by_other, name='book_list_view_by_other'),
-    path('downloader/', downloader_view, name='downloader_view'),
-
-
+    path('audio_download/', mp3downloader_view, name='mp3downloader_view'),
+    path('video_download/', mp4downloader_view, name='mp4downloader_view'),
+    path('downloader/<file_name>/', pdfdownloader_view, name='downloader_view'),
 
 ]
+

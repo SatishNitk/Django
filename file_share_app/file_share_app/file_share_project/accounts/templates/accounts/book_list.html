@@ -1,4 +1,5 @@
 {% extends "accounts/bash.html" %}
+{% load refactor %}
 
 {% block content %}
 {% if user.is_authenticated %}
@@ -8,9 +9,9 @@
       <tr>
         <th>Cover</th>
         <th>Title</th>
-        <th>Author</th>
+        <th>Author/singer</th>
         <th>User</th>
-        <th>Description</th>
+        <th>file-type</th>
         <th>Download</th>
         <th>Delete</th>
       </tr>
@@ -32,8 +33,16 @@
 
           <td>
             <a href="{{ book.file.url }}" class="btn btn-primary btn-sm" target="_blank">
-              Download PDF
-              <!-- {{book.file.url}} -->
+              Check
+
+
+            </a>
+                  <a href="javascript:{document.getElementById('download').submit()}"><button class="btn btn-primary btn-sm">Download </button></a>
+                <form id="download" method="post" action="{% url 'downloader_view' file_name='satosg' %}">
+                 {% csrf_token %}
+               <input type="hidden"/>
+                   </form>
+
             </a>
           </td>
           <td>
@@ -49,5 +58,12 @@
 {% else %}
   <p>You are not logged in..</p>
   {% endif %}
+
+
+
   
 {% endblock %}
+
+
+
+

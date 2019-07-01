@@ -1,10 +1,13 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib import auth
 from accounts.forms import StudentForm
 from accounts.models import *
-
+from django.contrib.auth.decorators import login_required
+from accounts.models import Filedb
+import requests 
+import os
 
 
 import io
@@ -55,7 +58,7 @@ def logout_view(request):
 		return redirect('home_view')
 
 
-
+@login_required(login_url='/login')
 def upload_view(request):
 	if request.method == 'POST':
 		if request.POST.get('title') and request.POST.get('author') and len(request.FILES)!=0:
@@ -85,19 +88,21 @@ def upload_view(request):
 # 	'context' : context1
 # 	}
 # 	return render(request, "accounts/login_success.html",context)
-
+@login_required(login_url='/login')
 def book_list_view(request):
     books = Filedb.objects.all()
     return render(request, 'accounts/book_list.html', {
         'books': books
     })
 
+@login_required(login_url='/login')
 def book_list_view_by_other(request):
     books = Filedb.objects.exclude(user = request.user)
     return render(request, 'accounts/book_list.html', {
         'books': books
     })
 
+@login_required(login_url='/login')
 def book_list_view_by_u(request):
     books = Filedb.objects.filter(user = request.user)
     return render(request, 'accounts/book_list.html', {
@@ -105,35 +110,49 @@ def book_list_view_by_u(request):
     })
 
 
-
+@login_required(login_url='/login')
 def delete_view(request, pk):
 	if request.method == 'POST':
 		book = Filedb.objects.get(pk=pk)
 		book.delete()
 		return redirect('book_list_view')
 
-def downloader_view(request):
-	return HttpResponse("downloadddder_view")
+def pdfdownloader_view(request, file_name):
+	print("file",file_name)
+	# response = HttpResponse(content_type='application/pdf')
+	# response['content_type'] = 'application/pdf'
+	# response['Content-Disposition'] = 'attachment;filename={}'.format(file_name)
+	# path = "/home/satish/satish_education/django/file_share_app/file_share_app/file_share_project/media/books/pdfs/" + file_name
+	# print(path)
+	# with open(path, 'rb') as pdf:
+	# 	response = HttpResponse(pdf.read())
+	# 	response['content_type'] = 'application/pdf'
+	# 	response['Content-Disposition'] = 'attachment;filename={}'.format(file_name)
+	# 	return response
+	return HttpResponse("kjh")
+
+def mp3downloader_view(request):
+    fname='/home/satish/ime/mp3_folder/j.mp3'
+    f = open(fname,"rb") 
+    response = HttpResponse()
+    response.write(f.read())
+    response['Content-Type'] ='audio/mpeg'
+    response['Content-Length'] =os.path.getsize(fname)
+    response['Content-Disposition'] = 'attachment; filename=filename.mp3'
+    return response
 
 
-# def my_image(request):
-#     # Create a file-like buffer to receive PDF data.
-#     buffer = io.BytesIO()
+def mp4downloader_view(request):
+    fname='/home/satish/Desktop/sa.mp4'
+    f = open(fname,"rb") 
+    response = HttpResponse()
+    response.write(f.read())
+    response['Content-Type'] ='video/mp4'
+    response['Content-Length'] =os.path.getsize(fname)
+    response['Content-Disposition'] = 'attachment; filename=filename.mp4'
+    return response
 
-#     # Create the PDF object, using the buffer as its "file."
-#     p = canvas.Canvas(buffer)
 
-#     # Draw things on the PDF. Here's where the PDF generation happens.
-#     # See the ReportLab documentation for the full list of functionality.
-#     p.drawString(100, 100, "Hello world.")
-
-#     # Close the PDF object cleanly, and we're done.
-#     p.showPage()
-#     p.save()
-
-#     # FileResponse sets the Content-Disposition header so that browsers
-#     # present the option to save the file.
-#     return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
 
 def my_image(request):
 	response = HttpResponse(content_type='application/pdf')
