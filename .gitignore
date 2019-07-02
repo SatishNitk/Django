@@ -22,7 +22,10 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
-
+.pdf
+.png
+.gif
+.pyc
 
 ### Python ###
 # Byte-compiled / optimized / DLL files

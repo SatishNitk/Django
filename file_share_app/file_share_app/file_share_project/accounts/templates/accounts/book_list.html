@@ -32,18 +32,16 @@
           <td>{{ book.description }}</td>
 
           <td>
-            <a href="{{ book.file.url }}" class="btn btn-primary btn-sm" target="_blank">
+            <a href="{{ book.file.url }}" id="url_data" class="btn btn-primary btn-sm" target="_blank">
               Check
-
-
             </a>
-                  <a href="javascript:{document.getElementById('download').submit()}"><button class="btn btn-primary btn-sm">Download </button></a>
-                <form id="download" method="post" action="{% url 'downloader_view' file_name='satosg' %}">
-                 {% csrf_token %}
-               <input type="hidden"/>
-                   </form>
-
-            </a>
+                  
+               
+<form id="new_form">
+    {% csrf_token%}
+    <button class="btn btn-primary btn-sm">Download </button>
+  </form>
+ 
           </td>
           <td>
             <form method="POST" action="{% url 'delete_view' book.pk %}">
@@ -52,16 +50,50 @@
             </form>
           </td>
         </tr>
+
+ 
+
+<script type="text/javascript">
+  $(document).on('submit','#new_form',function(e){
+    e.preventDefault();
+    $.ajax({
+      type:'POST',
+      url:'/account/apna/',
+      data:{
+        name:document.getElementById("url_data").href,
+        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+      },
+      success:function(){
+        alert("done");
+      }
+
+    });
+
+  });
+
+</script>
+
+
+
       {% endfor %}
     </tbody>
   </table>
+
+
+
+
+
+
+
+
 {% else %}
   <p>You are not logged in..</p>
   {% endif %}
 
 
 
-  
+
+
 {% endblock %}
 
 

@@ -19,7 +19,7 @@ from reportlab.pdfgen import canvas
 # Create your views here.
 
 def home_view(request):
-	return render(request, 'accounts/home.html')
+	return render(request, 'accounts/demo.html')
 
 
 def login_view(request):
@@ -117,8 +117,15 @@ def delete_view(request, pk):
 		book.delete()
 		return redirect('book_list_view')
 
-def pdfdownloader_view(request, file_name):
-	print("file",file_name)
+def pdfdownloader_view(request):
+	if request.method =='POST':
+		file_name ="s"
+		print("cominf..........jkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk")
+		print("file",file_name)
+		print(request.POST['name'])
+	else:
+		print("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
+
 	# response = HttpResponse(content_type='application/pdf')
 	# response['content_type'] = 'application/pdf'
 	# response['Content-Disposition'] = 'attachment;filename={}'.format(file_name)
@@ -166,3 +173,11 @@ def my_image(request):
 	buffer.close()
 	response.write(pdf)
 	return response
+
+
+def apna_view(request):
+	if request.method=='POST':
+		print("hggffv")
+		print(request.POST['name'])
+		return HttpResponse("khhjglllllllllllll")
+
