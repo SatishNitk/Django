@@ -61,6 +61,7 @@ def logout_view(request):
 @login_required(login_url='/login')
 def upload_view(request):
 	if request.method == 'POST':
+		print("bhbshbhjbhjbjhb")
 		if request.POST.get('title') and request.POST.get('author') and len(request.FILES)!=0:
 			user_form = StudentForm(request.POST, request.FILES)
 			if user_form.is_valid():
@@ -81,6 +82,7 @@ def upload_view(request):
 	else:
 		form = StudentForm()
 		return render(request,"accounts/upload.html",{"form":form})
+		# return HttpResponse("satish failes")
 
 # def demo_view(request):
 # 	context1 = Filedb.objects.filter(user=request.user)
@@ -88,6 +90,8 @@ def upload_view(request):
 # 	'context' : context1
 # 	}
 # 	return render(request, "accounts/login_success.html",context)
+
+
 @login_required(login_url='/login')
 def book_list_view(request):
     books = Filedb.objects.all()
@@ -117,45 +121,36 @@ def delete_view(request, pk):
 		book.delete()
 		return redirect('book_list_view')
 
-def pdfdownloader_view(request):
-	if request.method =='POST':
-		file_name ="s"
-		print("cominf..........jkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk")
-		print("file",file_name)
-		print(request.POST['name'])
-	else:
-		print("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh")
+def pdfdownloader_view(request, file_name):
+	response = HttpResponse(content_type='application/pdf')
+	response['content_type'] = 'application/pdf'
+	response['Content-Disposition'] = 'attachment;filename={}'.format(file_name)
+	path = "/home/satish/satish_education/django/file_share_app/file_share_app/file_share_project/media/books/pdfs/" + file_name
+	print(path)
+	with open(path, 'rb') as pdf:
+		response = HttpResponse(pdf.read())
+		response['content_type'] = 'application/pdf'
+		response['Content-Disposition'] = 'attachment;filename={}'.format(file_name)
+		return response
 
-	# response = HttpResponse(content_type='application/pdf')
-	# response['content_type'] = 'application/pdf'
-	# response['Content-Disposition'] = 'attachment;filename={}'.format(file_name)
-	# path = "/home/satish/satish_education/django/file_share_app/file_share_app/file_share_project/media/books/pdfs/" + file_name
-	# print(path)
-	# with open(path, 'rb') as pdf:
-	# 	response = HttpResponse(pdf.read())
-	# 	response['content_type'] = 'application/pdf'
-	# 	response['Content-Disposition'] = 'attachment;filename={}'.format(file_name)
-	# 	return response
-	return HttpResponse("kjh")
-
-def mp3downloader_view(request):
-    fname='/home/satish/ime/mp3_folder/j.mp3'
-    f = open(fname,"rb") 
+def mp3downloader_view(request,filename):
+    path='/home/satish/satish_education/django/file_share_app/file_share_app/file_share_project/media/books/pdfs/' + filename
+    f = open(path,"rb") 
     response = HttpResponse()
     response.write(f.read())
     response['Content-Type'] ='audio/mpeg'
-    response['Content-Length'] =os.path.getsize(fname)
-    response['Content-Disposition'] = 'attachment; filename=filename.mp3'
+    response['Content-Length'] =os.path.getsize(path)
+    response['Content-Disposition'] = 'attachment; filename={}'.format(filename)
     return response
 
 
-def mp4downloader_view(request):
-    fname='/home/satish/Desktop/sa.mp4'
-    f = open(fname,"rb") 
+def mp4downloader_view(request, filename):
+    path = "/home/satish/satish_education/django/file_share_app/file_share_app/file_share_project/media/books/pdfs/" + filename
+    f = open(path,"rb") 
     response = HttpResponse()
     response.write(f.read())
     response['Content-Type'] ='video/mp4'
-    response['Content-Length'] =os.path.getsize(fname)
+    response['Content-Length'] =os.path.getsize(path)
     response['Content-Disposition'] = 'attachment; filename=filename.mp4'
     return response
 
@@ -179,5 +174,33 @@ def apna_view(request):
 	if request.method=='POST':
 		print("hggffv")
 		print(request.POST['name'])
+		return redirect('book_list_view')
+	else:
 		return HttpResponse("khhjglllllllllllll")
 
+def getFile(request):
+	if request.method == 'POST':
+		f_name1 = request.session.get('f_name1')
+		if not f_name1:
+			f_name1 = request.POST['name']
+		request.session['f_name1'] = f_name1
+		return HttpResponse()
+	else:
+		f_name1 = request.session.get('f_name1')
+		f_name1 = f_name1.split('/')[-1]
+		print("file_name")
+		if f_name1.endswith('.pdf') :
+			pdf_file_name = f_name1
+			res = pdfdownloader_view(request,pdf_file_name)
+			del request.session['f_name1']
+			return res
+		elif f_name1.endswith(".mp4"):
+			mp4_file_name = f_name1
+			res = mp4downloader_view(request,mp4_file_name)
+			del request.session['f_name1']
+			return res
+		elif f_name1.endswith(".mp3"):
+			mp3_file_name = f_name1
+			res = mp3downloader_view(request,mp3_file_name)
+			del request.session['f_name1']
+			return res

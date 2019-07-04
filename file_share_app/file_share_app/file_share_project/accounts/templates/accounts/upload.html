@@ -3,11 +3,9 @@
 {% block content %}
 <form method="POST" class="post-form" enctype="multipart/form-data">  
         {% csrf_token %}
-        <div class="container">
-        {{msg}}
-        <table>{{ form.as_table }}  </table>
-        <button type="button" class="btn btn-success">save</button>
-    </div>
+     {{msg}}
+       {{ form.as_table }}  
+       <input type="submit" name="" value="jjh">
 </form>  
 {% endblock %}
 

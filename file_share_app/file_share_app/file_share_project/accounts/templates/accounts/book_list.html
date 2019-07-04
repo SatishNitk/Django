@@ -33,14 +33,39 @@
 
           <td>
             <a href="{{ book.file.url }}" id="url_data" class="btn btn-primary btn-sm" target="_blank">
-              Check
+              Look
             </a>
                   
-               
-<form id="new_form">
-    {% csrf_token%}
-    <button class="btn btn-primary btn-sm">Download </button>
-  </form>
+    <button class="btn btn-primary btn-sm" onclick="ajax_call('{{book.file.url}}')">Download </button>
+
+
+<script type="text/javascript">
+  function ajax_call(name1){
+    $.ajax({
+      type:'POST',
+      url:'/account/test/',
+      data:{
+        name:name1,
+        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+      },
+      success:function(res){
+        $(function(){
+        $("body").append('<iframe src="/account/test" style="display: none;" ></iframe>');
+    });
+        // alert(res);
+      }
+    });
+}
+</script>
+
+<!-- <script type="text/javascript">
+    $(function(){
+        $("body").append('<iframe src="/test" style="display: none;" ></iframe>');
+    });
+</script> -->
+
+
+
  
           </td>
           <td>
@@ -53,31 +78,14 @@
 
  
 
-<script type="text/javascript">
-  $(document).on('submit','#new_form',function(e){
-    e.preventDefault();
-    $.ajax({
-      type:'POST',
-      url:'/account/apna/',
-      data:{
-        name:document.getElementById("url_data").href,
-        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
-      },
-      success:function(){
-        alert("done");
-      }
-
-    });
-
-  });
-
-</script>
-
 
 
       {% endfor %}
     </tbody>
   </table>
+
+
+
 
 
 
