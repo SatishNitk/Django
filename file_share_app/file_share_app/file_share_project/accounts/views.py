@@ -19,7 +19,7 @@ from reportlab.pdfgen import canvas
 # Create your views here.
 
 def home_view(request):
-	return render(request, 'accounts/demo.html')
+	return render(request, 'accounts/home.html')
 
 
 def login_view(request):
@@ -154,29 +154,26 @@ def mp4downloader_view(request, filename):
     response['Content-Disposition'] = 'attachment; filename=filename.mp4'
     return response
 
+def imagedownloader_view(request, filename):
+    path = "/home/satish/satish_education/django/file_share_app/file_share_app/file_share_project/media/books/pdfs/" + filename
+    f = open(path,"rb") 
+    response = HttpResponse()
+    response.write(f.read())
+    response['Content-Type'] ='image/jpeg'
+    response['Content-Length'] =os.path.getsize(path)
+    response['Content-Disposition'] = 'attachment; filename={}'.format(filename)
+    return response
 
+def textdownloader_view(request, filename):
+    path = "/home/satish/satish_education/django/file_share_app/file_share_app/file_share_project/media/books/pdfs/" + filename
+    f = open(path,"rb") 
+    response = HttpResponse()
+    response.write(f.read())
+    response['Content-Type'] ='text/plain'
+    response['Content-Length'] =os.path.getsize(path)
+    response['Content-Disposition'] = 'attachment; filename={}'.format(filename)
+    return response
 
-def my_image(request):
-	response = HttpResponse(content_type='application/pdf')
-	response['Content-Disposition'] = 'attachment; filename="WishList.pdf"'
-	buffer = io.BytesIO()
-	p = canvas.Canvas(buffer)
-	p.drawString(100, 100, "Helldddddo world.")
-	p.showPage()
-	p.save()
-	pdf = buffer.getvalue()
-	buffer.close()
-	response.write(pdf)
-	return response
-
-
-def apna_view(request):
-	if request.method=='POST':
-		print("hggffv")
-		print(request.POST['name'])
-		return redirect('book_list_view')
-	else:
-		return HttpResponse("khhjglllllllllllll")
 
 def getFile(request):
 	if request.method == 'POST':
@@ -184,19 +181,22 @@ def getFile(request):
 		if not f_name1:
 			f_name1 = request.POST['name']
 		request.session['f_name1'] = f_name1
-		return HttpResponse()
+		print("name",request.session.get('f_name1'))
+		return HttpResponse("kk")
 	else:
 		f_name1 = request.session.get('f_name1')
 		f_name1 = f_name1.split('/')[-1]
-		print("file_name")
+		print("file_name",f_name1)
 		if f_name1.endswith('.pdf') :
 			pdf_file_name = f_name1
 			res = pdfdownloader_view(request,pdf_file_name)
 			del request.session['f_name1']
 			return res
-		elif f_name1.endswith(".mp4"):
+		elif f_name1.endswith(".mp4") or f_name1.endswith(".3gp") :
 			mp4_file_name = f_name1
+			print("mp4",mp4_file_name)
 			res = mp4downloader_view(request,mp4_file_name)
+			print("resss",res)
 			del request.session['f_name1']
 			return res
 		elif f_name1.endswith(".mp3"):
@@ -204,3 +204,11 @@ def getFile(request):
 			res = mp3downloader_view(request,mp3_file_name)
 			del request.session['f_name1']
 			return res
+		else:
+			mp3_file_name = f_name1
+			res = textdownloader_view(request,mp3_file_name)
+			del request.session['f_name1']
+			return res
+
+
+	
