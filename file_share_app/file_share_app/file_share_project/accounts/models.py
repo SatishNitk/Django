@@ -4,11 +4,17 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Filedb(models.Model):
+	FILE_CHOICES = (
+    ('video','VIDIO'),
+    ('audio', 'AUDIO'),
+    ('file','FILE'),
+    ('pdf','PDF'),
+	)
+
 	user = models.ForeignKey(User, on_delete= models.CASCADE)
 	title = models.CharField(max_length=50)
-	author = models.CharField(max_length=100, blank=True)
 	file = models.FileField(upload_to='books/pdfs/')
-	description = models.CharField(max_length=500, null=True, blank=True)
+	description= models.CharField(max_length=6, choices=FILE_CHOICES, default='file')
 	cover = models.ImageField(upload_to='books/covers/', null=True, blank=True)
 
 

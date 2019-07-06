@@ -10,6 +10,21 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </head>
 
+<style type="text/css">
+.footer2 {
+   position: fixed;
+   bottom: 0;
+   width: 100%;
+   color: blue;
+   text-align: center;
+}
+
+  body {
+  background-color: #e9ecef;
+
+}
+
+</style>
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -52,22 +67,17 @@
 
 
 
+ <!-- <footer class=" font-small blue  footer navbar-fixed-bottom"> -->
 
 
 {% block content %}
 {% endblock %}
 
- 
- <footer class="page-footer font-small blue">
-
-  <!-- Copyright -->
-  <div class="text-center navbar-fixed-bottom">© 2018 Copyright:
+ <footer class="footer2">
+ <div class="text-center navbar-fixed-bottom">© 2019 Copyright:
     <a href="https://mdbootstrap.com/education/bootstrap/"> MDBootstrap.com</a>
   </div>
-  <!-- Copyright -->
-
 </footer>
-
 
 </body>
 

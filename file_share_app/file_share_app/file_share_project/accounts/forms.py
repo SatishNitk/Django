@@ -18,4 +18,4 @@ from accounts.models import Filedb
 class StudentForm(forms.ModelForm):
     class Meta:
         model = Filedb
-        fields = ('title', 'author', 'file', 'cover', 'description')
+        fields = ('title',  'file', 'cover', 'description')

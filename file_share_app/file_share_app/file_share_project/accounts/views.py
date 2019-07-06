@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from accounts.models import Filedb
 import requests 
 import os
-
+import mimetypes
 
 import io
 from django.http import FileResponse
@@ -62,7 +62,7 @@ def logout_view(request):
 def upload_view(request):
 	if request.method == 'POST':
 		print("bhbshbhjbhjbjhb")
-		if request.POST.get('title') and request.POST.get('author') and len(request.FILES)!=0:
+		if request.POST.get('title') and len(request.FILES)!=0:
 			user_form = StudentForm(request.POST, request.FILES)
 			if user_form.is_valid():
 				user_form_instance = user_form.save(commit=False)
@@ -83,13 +83,6 @@ def upload_view(request):
 		form = StudentForm()
 		return render(request,"accounts/upload.html",{"form":form})
 		# return HttpResponse("satish failes")
-
-# def demo_view(request):
-# 	context1 = Filedb.objects.filter(user=request.user)
-# 	context = {
-# 	'context' : context1
-# 	}
-# 	return render(request, "accounts/login_success.html",context)
 
 
 @login_required(login_url='/login')
@@ -164,12 +157,12 @@ def imagedownloader_view(request, filename):
     response['Content-Disposition'] = 'attachment; filename={}'.format(filename)
     return response
 
-def textdownloader_view(request, filename):
+def all_downloader_view(request, filename):
     path = "/home/satish/satish_education/django/file_share_app/file_share_app/file_share_project/media/books/pdfs/" + filename
     f = open(path,"rb") 
     response = HttpResponse()
     response.write(f.read())
-    response['Content-Type'] ='text/plain'
+    response['Content-Type'] =mimetypes.guess_type(filename)[0]
     response['Content-Length'] =os.path.getsize(path)
     response['Content-Disposition'] = 'attachment; filename={}'.format(filename)
     return response
@@ -187,28 +180,13 @@ def getFile(request):
 		f_name1 = request.session.get('f_name1')
 		f_name1 = f_name1.split('/')[-1]
 		print("file_name",f_name1)
-		if f_name1.endswith('.pdf') :
-			pdf_file_name = f_name1
-			res = pdfdownloader_view(request,pdf_file_name)
-			del request.session['f_name1']
-			return res
-		elif f_name1.endswith(".mp4") or f_name1.endswith(".3gp") :
-			mp4_file_name = f_name1
-			print("mp4",mp4_file_name)
-			res = mp4downloader_view(request,mp4_file_name)
-			print("resss",res)
-			del request.session['f_name1']
-			return res
-		elif f_name1.endswith(".mp3"):
-			mp3_file_name = f_name1
-			res = mp3downloader_view(request,mp3_file_name)
-			del request.session['f_name1']
-			return res
-		else:
-			mp3_file_name = f_name1
-			res = textdownloader_view(request,mp3_file_name)
-			del request.session['f_name1']
-			return res
-
+		pdf_file_name = f_name1
+		res = all_downloader_view(request,pdf_file_name)
+		del request.session['f_name1']
+		return res
 
 	
+
+
+
+
